@@ -14,9 +14,9 @@ export const portfolioData = {
     email: "vrajesh.bhatt@outlook.com",
     availability: "Open to Relocate",
     social: {
-      linkedin: "[https://linkedin.com/in/vrajeshbhatt/](https://linkedin.com/in/vrajeshbhatt/)",
-      github: "[https://github.com/vrajeshbhatt](https://github.com/vrajeshbhatt)",
-      huggingface: "[https://huggingface.co/](https://huggingface.co/)", 
+      linkedin: "https://linkedin.com/in/vrajeshbhatt/",
+      github: "https://github.com/vrajeshbhatt",
+      huggingface: "https://huggingface.co/vrajeshbhatt", 
       email: "mailto:vrajesh.bhatt@outlook.com"
     }
   },
