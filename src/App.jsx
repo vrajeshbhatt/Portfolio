@@ -876,8 +876,13 @@ const Contact = ({ data }) => {
                 {status === 'idle' && <><Send size={18} /> Send Message</>}
                 {status === 'sending' && <><Loader2 size={18} className="animate-spin" /> Sending...</>}
                 {status === 'success' && <><CheckCircle size={18} /> Message Sent!</>}
-                {status === 'error' && <><AlertCircle size={18} /> Error. Try Again.</>}
+                {status === 'error' && <><AlertCircle size={18} /> Failed. Check Console.</>}
               </button>
+              {status === 'error' && (
+                <p className="text-red-400 text-xs text-center mt-2">
+                  Check the console (F12) for the exact error. Likely an EmailJS service issue.
+                </p>
+              )}
             </div>
           </form>
         </div>
