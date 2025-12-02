@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { portfolioData } from './portfolioData';
 import NeuralBackground from './components/NeuralBackground';
+import WorkSection from './components/WorkSection';
+import SectionHeading from './components/SectionHeading';
 import { motion, AnimatePresence } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import {
@@ -426,54 +428,63 @@ const Editor = ({ data, setData, onClose }) => {
 
 const Navbar = ({ toggleEditor }) => {
   const [scrolled, setScrolled] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
+
+    // Check for admin parameter
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === 'true') {
+      setIsAdmin(true);
+    }
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
     { name: 'About', href: '#about' },
     { name: 'Skills', href: '#skills' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Projects', href: '#projects' },
+    { name: 'Work', href: '#work' },
     { name: 'Contact', href: '#contact' },
   ];
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex justify-center pt-6`}>
       <div className={`
-        flex items-center gap-8 px-8 py-4 rounded-full border transition-all duration-300
+        flex items-center gap-8 px-6 py-3 rounded-full border transition-all duration-500
         ${scrolled
-          ? 'bg-cyber-slate/80 backdrop-blur-xl border-slate-700/50 shadow-[0_0_30px_rgba(6,182,212,0.1)]'
-          : 'bg-transparent border-transparent'}
+          ? 'bg-slate-900/80 backdrop-blur-2xl border-slate-700/50 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] shadow-neon-cyan/5'
+          : 'bg-slate-900/50 backdrop-blur-xl border-white/10 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.5)]'}
+        hover:border-neon-cyan/30 hover:shadow-[0_20px_40px_-10px_rgba(6,182,212,0.15)]
       `}>
         <a href="#" className="text-2xl font-bold tracking-tighter group">
           <span className="text-neon-cyan group-hover:text-neon-purple transition-colors">VB</span>
           <span className="text-slate-100">.Data</span>
         </a>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-2">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
-              className="text-sm font-medium text-slate-400 hover:text-neon-cyan transition-colors relative group"
+              className="px-4 py-2 rounded-full text-base font-medium text-slate-400 hover:bg-neon-cyan/10 hover:text-neon-cyan border border-transparent hover:border-neon-cyan/20 transition-all duration-300"
             >
               {link.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-neon-cyan transition-all group-hover:w-full" />
             </a>
           ))}
         </div>
 
-        <button
-          onClick={toggleEditor}
-          className="p-2 text-slate-400 hover:text-neon-purple hover:bg-white/5 rounded-full transition-all"
-          title="Edit Content"
-        >
-          <Edit size={18} />
-        </button>
+        {isAdmin && (
+          <button
+            onClick={toggleEditor}
+            className="p-2 text-slate-400 hover:text-neon-purple hover:bg-white/5 rounded-full transition-all"
+            title="Edit Content"
+          >
+            <Edit size={18} />
+          </button>
+        )}
       </div>
     </nav>
   );
@@ -550,24 +561,13 @@ const Hero = ({ data }) => {
   );
 };
 
-const SectionHeading = ({ children, number }) => (
-  <div className="flex items-center gap-4 mb-12 group">
-    <span className="text-neon-cyan font-mono text-xl font-bold opacity-70 group-hover:opacity-100 transition-opacity">
-      {number}.
-    </span>
-    <h2 className="text-3xl md:text-4xl font-bold text-slate-100 relative">
-      {children}
-      <span className="absolute -bottom-2 left-0 w-1/3 h-1 bg-gradient-to-r from-neon-cyan to-transparent rounded-full" />
-    </h2>
-    <div className="h-px bg-slate-800 flex-grow max-w-xs ml-4 group-hover:bg-slate-700 transition-colors" />
-  </div>
-);
+
 
 const About = ({ data }) => {
   return (
     <section id="about" className="py-24 relative">
       <div className="max-w-5xl mx-auto px-6">
-        <SectionHeading number="01">About Me</SectionHeading>
+        <SectionHeading>About Me</SectionHeading>
 
         <div className="grid md:grid-cols-5 gap-12 items-center">
           <div className="md:col-span-3 space-y-6 text-slate-400 leading-relaxed text-lg">
@@ -595,7 +595,7 @@ const About = ({ data }) => {
                 <img
                   src={data.personalInfo.image}
                   alt={data.personalInfo.name}
-                  className="w-full h-full object-cover rounded-xl grayscale group-hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-full object-cover rounded-xl transition-all duration-500"
                 />
               ) : (
                 <div className="h-64 flex items-center justify-center bg-slate-900 rounded-xl">
@@ -638,7 +638,7 @@ const Skills = ({ data }) => {
   return (
     <section id="skills" className="py-24 relative">
       <div className="max-w-6xl mx-auto px-6">
-        <SectionHeading number="02">Technical Skills</SectionHeading>
+        <SectionHeading>Technical Skills</SectionHeading>
         <motion.div
           variants={container}
           initial="hidden"
@@ -679,127 +679,7 @@ const Skills = ({ data }) => {
   );
 };
 
-const Experience = ({ data }) => {
-  return (
-    <section id="experience" className="py-24 relative">
-      <div className="max-w-4xl mx-auto px-6">
-        <SectionHeading number="03">Where I've Worked</SectionHeading>
 
-        <div className="space-y-12 border-l border-slate-800 ml-3 md:ml-6 pl-8 md:pl-12 relative">
-          {data.experience.map((job, index) => (
-            <motion.div
-              key={job.id}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.1 }}
-              className="relative group"
-            >
-              {/* Timeline Node */}
-              <div className="absolute -left-[41px] md:-left-[59px] top-1 w-5 h-5 rounded-full border-4 border-cyber-black bg-slate-600 group-hover:bg-neon-cyan group-hover:scale-125 transition-all duration-300 shadow-[0_0_0_4px_rgba(15,23,42,1)]" />
-
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
-                <h3 className="text-xl font-bold text-slate-100 group-hover:text-neon-cyan transition-colors">
-                  {job.role}
-                </h3>
-                <span className="text-sm font-mono text-neon-purple/80 bg-neon-purple/10 px-2 py-1 rounded">{job.period}</span>
-              </div>
-
-              <h4 className="text-neon-teal font-medium mb-4 text-lg flex items-center gap-2">
-                {job.company}
-              </h4>
-
-              <div className="bg-cyber-slate/30 p-6 rounded-xl border border-slate-800/50 hover:border-slate-700 transition-colors">
-                <ul className="space-y-3">
-                  {job.description.map((desc, i) => (
-                    <li key={i} className="flex items-start gap-3 text-slate-400 text-sm leading-relaxed">
-                      <span className="text-neon-cyan mt-1.5">▹</span>
-                      {desc}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const Projects = ({ data }) => {
-  return (
-    <section id="projects" className="py-24 relative">
-      <div className="max-w-6xl mx-auto px-6">
-        <SectionHeading number="04">Featured Projects</SectionHeading>
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
-          {data.projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="group relative bg-cyber-slate rounded-2xl overflow-hidden border border-slate-800 hover:border-neon-purple/50 transition-all duration-300"
-            >
-              {/* Hover Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 to-neon-purple/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <div className="p-8 h-full flex flex-col relative z-10">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="p-3 bg-slate-900 rounded-xl text-neon-cyan border border-slate-800 group-hover:border-neon-cyan/30 transition-colors">
-                    <Code2 size={24} />
-                  </div>
-                  <div className="flex gap-4">
-                    {project.links.repo && (
-                      <a
-                        href={project.links.repo}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-slate-400 hover:text-neon-cyan transition-colors"
-                      >
-                        <Github size={20} />
-                      </a>
-                    )}
-                    {project.links.demo && (
-                      <a
-                        href={project.links.demo}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-slate-400 hover:text-neon-purple transition-colors"
-                      >
-                        <ExternalLink size={20} />
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                <h3 className="text-xl font-bold text-slate-100 mb-2 group-hover:text-neon-cyan transition-colors">
-                  {project.title}
-                </h3>
-                <p className="text-slate-400 text-sm mb-6 flex-grow leading-relaxed">
-                  {project.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mt-auto">
-                  {project.techStack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="text-xs font-mono text-neon-cyan/80 bg-neon-cyan/5 px-2 py-1 rounded border border-neon-cyan/10"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
 
 // --- DYNAMIC CONTACT FORM (UPDATED) ---
 const Contact = ({ data }) => {
@@ -946,8 +826,7 @@ export default function App() {
             <Hero data={data} />
             <About data={data} />
             <Skills data={data} />
-            <Experience data={data} />
-            <Projects data={data} />
+            <WorkSection data={data} />
             <Contact data={data} />
           </main>
           <Footer />
