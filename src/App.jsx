@@ -807,6 +807,14 @@ const Contact = ({ data }) => {
     e.preventDefault();
     setStatus('sending');
 
+    // Debug: Log the data being sent
+    const formData = new FormData(form.current);
+    console.log("Sending EmailJS Data:", {
+      from_name: formData.get('from_name'),
+      from_email: formData.get('from_email'),
+      message: formData.get('message')
+    });
+
     emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY)
       .then((result) => {
         setStatus('success');
