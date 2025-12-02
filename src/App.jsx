@@ -837,7 +837,7 @@ const Contact = ({ data }) => {
                 <input
                   required
                   type="text"
-                  name="user_name"
+                  name="from_name"
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-slate-200 focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan focus:outline-none transition-all"
                   placeholder="Your Name"
                 />
@@ -847,7 +847,7 @@ const Contact = ({ data }) => {
                 <input
                   required
                   type="email"
-                  name="user_email"
+                  name="from_email"
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-slate-200 focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan focus:outline-none transition-all"
                   placeholder="your@email.com"
                 />
