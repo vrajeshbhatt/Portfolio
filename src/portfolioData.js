@@ -14,6 +14,7 @@ export const portfolioData = {
     email: "vrajesh.bhatt@outlook.com",
     availability: "Open to Relocate",
     image:"profile.jpg",
+    heroImage: "https://images.unsplash.com/photo-1518932945647-7a1c969f8be2?auto=format&fit=crop&q=80&w=2070",
     social: {
       linkedin: "https://linkedin.com/in/vrajeshbhatt/",
       github: "https://github.com/vrajeshbhatt",

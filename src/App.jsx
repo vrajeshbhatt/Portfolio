@@ -207,11 +207,9 @@ const Editor = ({ data, setData, onClose }) => {
           <EditorField label="Role Title" value={data.personalInfo.role} onChange={(v) => updatePersonalInfo('role', v)} />
           <EditorField label="Location" value={data.personalInfo.location} onChange={(v) => updatePersonalInfo('location', v)} />
           <EditorField label="Email" value={data.personalInfo.email} onChange={(v) => updatePersonalInfo('email', v)} />
-          {/* New field for image */}
           <EditorField label="Image URL (e.g., /profile.jpg)" value={data.personalInfo.image || ''} onChange={(v) => updatePersonalInfo('image', v)} />
           <div className="md:col-span-2">
-            <EditorField label="Tagline" type="textarea" value={data.personalInfo.tagline} onChange={(v) => updatePersonalInfo('tagline', v)} />
-          </div>
+            <EditorField label="Hero Background URL" value={data.personalInfo.heroImage || ''} onChange={(v) => updatePersonalInfo('heroImage', v)} />          </div>
         </div>
       </div>
       <div className="bg-slate-900/50 p-6 rounded-xl border border-slate-800">
@@ -511,11 +509,25 @@ const Navbar = ({ toggleEditor }) => {
 
 const Hero = ({ data }) => {
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden bg-slate-950 pt-20">
-      <div className="absolute top-0 left-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 pt-20">
+      
+      {/* Background Image Container */}
+      <div className="absolute inset-0 z-0">
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/80 to-slate-950/90 z-10" />
+        
+        {/* Image - renders only if heroImage URL exists */}
+        {data.personalInfo.heroImage && (
+          <img 
+            src={data.personalInfo.heroImage} 
+            alt="Machine Learning Background" 
+            className="w-full h-full object-cover opacity-30 transition-opacity duration-1000"
+          />
+        )}
+      </div>
 
-      <div className="max-w-7xl mx-auto px-6 w-full relative z-10">
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-6 w-full relative z-20">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -555,7 +567,7 @@ const Hero = ({ data }) => {
       <motion.div 
         animate={{ y: [0, 10, 0] }} 
         transition={{ repeat: Infinity, duration: 2 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-500"
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-slate-500 z-20"
       >
         <ChevronDown size={24} />
       </motion.div>
